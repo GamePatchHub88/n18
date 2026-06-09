@@ -1,4 +1,4 @@
-/* ===== RESET ===== */
+/* ===== ===== RESET & BASE ===== ===== */
 * {
   margin: 0;
   padding: 0;
@@ -15,27 +15,22 @@ html {
   scroll-behavior: smooth;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden; /* لمنع أي اهتزازات عرضية أثناء الأنميشن */
 }
 
 body {
-  font-family:
-    "Cairo",
-    "Segoe UI",
-    -apple-system,
-    BlinkMacSystemFont,
-    sans-serif;
+  font-family: "Bai Jamjuree", "Cairo", sans-serif;
   font-size: 1.6rem;
   line-height: 1.6;
   color: #000000;
   background: rgb(255, 255, 255);
   min-height: 100vh;
-  /* padding: 20px; */
   text-rendering: optimizeLegibility;
   display: flex;
   flex-direction: column;
+  overflow-x: hidden;
 }
 
-/* Remove default margins and padding */
 h1,
 h2,
 h3,
@@ -52,54 +47,12 @@ p {
   margin: 0;
   padding: 0;
 }
-
 ul,
 ol {
   margin: 0;
   padding: 0;
   list-style: none;
 }
-
-li {
-  margin: 0;
-  padding: 0;
-}
-
-a {
-  text-decoration: none;
-  color: inherit;
-  background-color: transparent;
-  cursor: pointer;
-  transition: 0.3s ease;
-}
-
-a:hover {
-  text-decoration: none;
-}
-
-button {
-  margin: 0;
-  padding: 0;
-  background: transparent;
-  border: none;
-  font-family: inherit;
-  cursor: pointer;
-  transition: 0.3s ease;
-}
-
-button:active {
-  transform: scale(0.98);
-}
-
-input,
-textarea,
-select {
-  font-family: inherit;
-  font-size: inherit;
-  line-height: inherit;
-  color: inherit;
-}
-
 img,
 svg {
   display: block;
@@ -107,26 +60,47 @@ svg {
   height: auto;
 }
 
-table {
-  border-collapse: collapse;
-  border-spacing: 0;
+/* ===== ===== KEYFRAMES (محركات الأنميشن الرئيسي) ===== ===== */
+
+/* ظهور وتكبير ناعم للوجو */
+@keyframes logoFadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
 }
 
-blockquote {
-  margin: 0;
-  padding: 0;
+/* صعود ناعم مع ظهور تدريجي للنصوص والأزرار */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
-/* Remove focus outline for mouse users */
-:focus-visible {
-  outline: 2px solid rgba(0, 0, 0, 0.3);
-  outline-offset: 2px;
+/* أنميشن ظهور الأقسام عند السكرول (بديل خفيف للـ JavaScript) */
+@keyframes sectionReveal {
+  from {
+    opacity: 0;
+    transform: translateY(50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
-/* ===== ===== */
+/* ===== ===== HERO SECTION (أنميشن أول فتح للموقع) ===== ===== */
 .hero {
   background: url("images/bg-header-desktop.png") no-repeat center center/cover;
-  background-size: cover;
   width: 100%;
   display: flex;
   flex-direction: column;
@@ -135,59 +109,98 @@ blockquote {
   gap: 20px;
   text-align: center;
 }
+
 .hero__2 {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  align-self: center;
-  justify-self: center;
   gap: 20px;
-  text-align: center;
   width: 65rem;
   margin-top: 15rem;
+}
+
+/* تطبيق أنميشن الظهور التدريجي المتتابع (Staggered Animation) */
+.hero__logo {
+  animation: logoFadeIn 1s cubic-bezier(0.25, 1, 0.5, 1) forwards;
 }
 
 .hero__title {
   font-size: 3.2rem;
   color: hsl(210, 10%, 33%);
+  opacity: 0;
+  animation: fadeInUp 0.8s cubic-bezier(0.25, 1, 0.5, 1) 0.3s forwards;
 }
+
 .hero__subtitle {
   font-size: 1.8rem;
   color: hsl(201, 11%, 66%);
+  opacity: 0;
+  animation: fadeInUp 0.8s cubic-bezier(0.25, 1, 0.5, 1) 0.5s forwards;
 }
+
+.hero__buttons {
+  display: flex;
+  gap: 20px;
+  opacity: 0;
+  animation: fadeInUp 0.8s cubic-bezier(0.25, 1, 0.5, 1) 0.7s forwards;
+}
+
+/* ===== ===== BUTTONS (تفاعلات الأزرار الطبيعية) ===== ===== */
 .btn {
-  background-color: hsl(210, 10%, 33%);
   color: #fff;
-  padding: 0.8rem 2rem;
+  padding: 1.2rem 3rem;
   border-radius: 5rem;
   font-size: 1.6rem;
+  font-weight: 600;
   margin-bottom: 20px;
   z-index: 1;
+  display: inline-block;
+  transform: translateY(0) scale(1);
+  /* العودة: ناعمة وبطيئة كموج البحر */
+  transition:
+    transform 0.5s cubic-bezier(0.25, 1, 0.5, 1),
+    box-shadow 0.5s ease-out;
 }
+
 .btn:hover {
-  scale: 1.2;
-  transform: translateY(-5px);
+  /* الذهاب: سريع وخاطف ومطاطي بشكل طبيعي */
+  transform: translateY(-4px) scale(1.03);
+  transition:
+    transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275),
+    box-shadow 0.2s ease-in-out;
+}
+
+.btn:active {
+  transform: translateY(-1px) scale(0.98);
 }
 
 .btn--ios {
   background-color: hsl(171, 66%, 44%);
 }
 .btn--ios:hover {
-  background-color: hsl(171, 66%, 44%);
-  box-shadow: 0 0 20px hsl(171, 66%, 44%);
+  box-shadow: 0 10px 25px rgba(74, 189, 172, 0.45);
 }
+
 .btn--mac {
   background-color: hsl(233, 100%, 69%);
 }
 .btn--mac:hover {
-  background-color: hsl(233, 100%, 69%);
-  box-shadow: 0 0 20px hsl(233, 100%, 69%);
+  box-shadow: 0 10px 25px rgba(97, 117, 250, 0.45);
 }
 
-.hero__buttons {
-  display: flex;
-  gap: 20px;
+/* ===== ===== ALL SECTIONS (أنميشن الظهور مع السكرول) ===== ===== */
+/* نطبق تأثير تظهر تلقائي عند دخول الشاشة بفضل الـ animation-timeline المدعوم حديثاً */
+.section--center,
+.workflow,
+.logos,
+.cta {
+  view-timeline-name: --section;
+  view-timeline-axis: block;
+  animation-name: sectionReveal;
+  animation-fill-mode: both;
+  animation-timeline: --section;
+  animation-range: entry 10% cover 40%;
 }
 
 .section--center {
@@ -199,16 +212,19 @@ blockquote {
   text-align: center;
   margin-top: 15rem;
 }
+
 .section__heading {
   font-size: 3rem;
   color: hsl(210, 10%, 33%);
   margin-bottom: 10px;
 }
+
 .section__subheading {
   font-size: 1.8rem;
   color: hsl(201, 11%, 66%);
   margin-bottom: 50px;
 }
+
 .section__1 {
   width: 68rem;
   display: flex;
@@ -216,6 +232,8 @@ blockquote {
   gap: 30px;
   margin-bottom: 50px;
 }
+
+/* ===== ===== SNIPPETS & FEATURES ===== ===== */
 .snippets {
   display: flex;
   flex-direction: row;
@@ -223,10 +241,18 @@ blockquote {
   align-items: center;
   gap: 7rem;
 }
+
 .snippets img {
   width: 70rem;
-  /* aspect-ratio: 1/1; */
+  transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1);
 }
+
+/* تفاعل الصور عند الـ Hover */
+.snippets img:hover {
+  transform: scale(1.03) translateX(5px);
+  transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
 .snippets__features {
   text-align: left;
   display: flex;
@@ -234,6 +260,16 @@ blockquote {
   gap: 70px;
   width: 33rem;
 }
+
+/* تفاعل ناعم لميزات التطبيق عند المرور عليها */
+.feature {
+  transition: transform 0.4s ease-out;
+}
+.feature:hover {
+  transform: translateX(10px);
+  transition: transform 0.2s ease-in-out;
+}
+
 .feature__title {
   font-size: 2.4rem;
   color: hsl(210, 10%, 33%);
@@ -242,9 +278,20 @@ blockquote {
   font-size: 1.6rem;
   color: hsl(201, 11%, 66%);
 }
+
 .devices__image {
   width: 70rem;
+  margin: 0 auto;
 }
+.devices__image img {
+  transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+}
+.devices__image img:hover {
+  transform: scale(1.04) translateY(-5px);
+  transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+/* ===== ===== WORKFLOW CARDS ===== ===== */
 .workflow {
   display: flex;
   flex-direction: column;
@@ -261,6 +308,8 @@ blockquote {
   align-items: center;
   gap: 7rem;
 }
+
+/* الكروت ترتفع وتظهر ظلالها بنعومة فائقة */
 .workflow__card {
   display: flex;
   flex-direction: column;
@@ -269,7 +318,28 @@ blockquote {
   gap: 20px;
   text-align: center;
   width: 30rem;
+  padding: 2.5rem;
+  border-radius: 12px;
+  transition:
+    transform 0.5s cubic-bezier(0.25, 1, 0.5, 1),
+    box-shadow 0.5s ease-out;
 }
+
+.workflow__card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.05);
+  transition:
+    transform 0.25s cubic-bezier(0.25, 1, 0.5, 1),
+    box-shadow 0.25s ease-in-out;
+}
+
+.workflow__card img {
+  transition: transform 0.4s ease-out;
+}
+.workflow__card:hover img {
+  transform: scale(1.1);
+}
+
 .workflow__card-title {
   font-size: 2.4rem;
   color: hsl(210, 10%, 33%);
@@ -278,6 +348,8 @@ blockquote {
   font-size: 1.6rem;
   color: hsl(201, 11%, 66%);
 }
+
+/* ===== ===== LOGOS & CTA ===== ===== */
 .logos {
   display: flex;
   flex-direction: row;
@@ -286,6 +358,25 @@ blockquote {
   gap: 4rem;
   margin-bottom: 10rem;
 }
+
+.logos img {
+  filter: grayscale(100%);
+  opacity: 0.6;
+  transition: all 0.5s ease-out;
+}
+
+.logos img:hover {
+  filter: grayscale(0%);
+  opacity: 1;
+  transform: scale(1.08);
+  transition: all 0.2s ease-in-out;
+}
+
+.cta {
+  margin: 0 auto;
+}
+
+/* ===== ===== FOOTER ===== ===== */
 .footer {
   background-color: hsl(0, 0%, 94%);
   color: hsl(201, 11%, 66%);
@@ -298,20 +389,31 @@ blockquote {
   padding: 4rem 0;
   margin-top: 10rem;
 }
+
 .footer__nav {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   text-align: left;
   gap: 20px;
 }
+
 .footer__nav a {
   color: hsl(201, 11%, 66%);
   font-size: 2rem;
+  transition:
+    color 0.4s ease-out,
+    transform 0.4s ease-out;
+  display: inline-block;
 }
 
-.footer img {
-  width: 6rem;
+.footer__nav a:hover {
+  color: hsl(171, 66%, 44%);
+  transform: translateX(4px);
+  transition:
+    color 0.2s ease-in-out,
+    transform 0.2s ease-in-out;
 }
+
 .footer__social {
   display: flex;
   flex-direction: row;
@@ -319,40 +421,45 @@ blockquote {
   align-items: center;
   gap: 20px;
 }
-.footer__social img {
-  width: 2rem;
+
+.footer__social a {
+  transition: transform 0.4s ease-out;
+}
+.footer__social a:hover {
+  transform: translateY(-4px) scale(1.15);
+  transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
+/* ===== ===== RESPONSIVE (MEDIA QUERY) ===== ===== */
 @media (max-width: 768px) {
   .hero {
     padding: 0 20px;
     width: 100%;
     background: url("images/bg-header-mobile.png") no-repeat center center/cover;
-    opacity: 0.8;
-    background-size: cover;
   }
   .hero__2 {
     width: 100%;
   }
-  .hero__2 img {
-    margin-top: 2rem;
-  }
   .hero__buttons {
     flex-direction: column;
     width: 100%;
-    gap: 1px;
+    gap: 10px;
   }
   .btn {
     width: 100%;
     text-align: center;
   }
-  .btn:hover {
-    scale: 1.03;
-    transform: translateY(-5px);
+
+  /* في الموبايل نلغي أنميشن السكرول المعقد لضمان سلاسة الأداء وثبات التصفح */
+  .section--center,
+  .workflow,
+  .logos,
+  .cta {
+    animation: none;
   }
+
   .section--center {
     width: 100%;
-    padding: 0;
   }
   .section__1 {
     width: 100%;
@@ -361,6 +468,9 @@ blockquote {
   .snippets {
     flex-direction: column;
     gap: 3rem;
+  }
+  .snippets img {
+    width: 100%;
   }
   .snippets__features {
     text-align: center;
@@ -375,10 +485,10 @@ blockquote {
   }
   .logos {
     flex-direction: column;
-    gap: 10rem;
+    gap: 6rem;
   }
-  .cta{
-  padding: 0 20px;
+  .cta {
+    padding: 0 20px;
   }
   .footer {
     flex-direction: column;
@@ -387,7 +497,5 @@ blockquote {
   .footer__nav {
     grid-template-columns: 1fr;
     text-align: center;
-    color: #000000;
   }
-
 }
